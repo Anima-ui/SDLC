@@ -1,0 +1,129 @@
+@startuml SuperHeroCalculatorMVC
+
+title Диаграмма классов калькулятора уровня супергероя
+
+top to bottom direction
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 45
+skinparam ranksep 50
+
+class Main {
+    + {static} main(args: String[]): void
+    - {static} useSystemLookAndFeel(): void
+}
+
+class MainFrame {
+    - levelLabel: JLabel
+    - scoreLabel: JLabel
+    - heightValue: JLabel
+    - weightValue: JLabel
+    - ageValue: JLabel
+    - pullUpsValue: JLabel
+    - sleepValue: JLabel
+    - inputButton: JButton
+    + setInputAction(action: Runnable): void
+    + observe(model: SuperHeroModel): void
+    + showState(data: HeroData, result: HeroResult): void
+    - createContent(): JPanel
+}
+
+class SuperHeroController {
+    - model: SuperHeroModel
+    - view: MainFrame
+    + SuperHeroController(model: SuperHeroModel, view: MainFrame)
+    - openInputDialog(): void
+    - calculate(dialog: InputDialog): void
+    - parseDouble(text: String, fieldName: String): double
+    - parseInteger(text: String, fieldName: String): int
+}
+
+class SuperHeroModel {
+    + {static} STATE_PROPERTY: String
+    - changes: PropertyChangeSupport
+    - lastData: HeroData
+    - result: HeroResult
+    + calculate(data: HeroData): void
+    + getLastData(): HeroData
+    + getResult(): HeroResult
+    + addPropertyChangeListener(listener: PropertyChangeListener): void
+    - validate(data: HeroData): void
+    - evaluate(data: HeroData): HeroResult
+    - bodyMassScore(bmi: double): int
+    - ageScore(age: int): int
+    - sleepScore(hours: double): int
+}
+
+class InputDialog {
+    - heightField: JTextField
+    - weightField: JTextField
+    - ageField: JTextField
+    - pullUpsField: JTextField
+    - sleepField: JTextField
+    - calculateButton: JButton
+    + InputDialog(owner: JFrame, previousData: HeroData)
+    + setCalculateAction(action: Runnable): void
+    + heightText(): String
+    + weightText(): String
+    + ageText(): String
+    + pullUpsText(): String
+    + sleepText(): String
+    + showError(message: String): void
+    - fill(data: HeroData): void
+}
+
+class HeroData <<record>> {
+    + heightCm: double
+    + weightKg: double
+    + age: int
+    + pullUps: int
+    + sleepHours: double
+}
+
+class HeroResult <<record>> {
+    + level: HeroLevel
+    + score: int
+    + bodyMassIndex: double
+}
+
+enum HeroLevel {
+    TRAINEE
+    HERO
+    LEGEND
+    NEEDS_VACATION
+    - title: String
+    + title(): String
+}
+
+class ValidationException {
+    + ValidationException(message: String)
+}
+
+interface PropertyChangeListener {
+    + propertyChange(event: PropertyChangeEvent): void
+}
+
+Main ..> MainFrame : creates
+Main ..> SuperHeroModel : creates
+Main ..> SuperHeroController : creates
+
+MainFrame ..> SuperHeroController : delegates user actions
+MainFrame ..> SuperHeroModel : subscribes / reads state
+MainFrame ..> PropertyChangeListener : creates listener
+
+SuperHeroController --> SuperHeroModel : updates
+SuperHeroController --> MainFrame : coordinates
+SuperHeroController ..> InputDialog : creates / manages
+SuperHeroController ..> HeroData : creates
+SuperHeroController ..> ValidationException : handles
+
+SuperHeroModel *-- HeroData : stores input
+SuperHeroModel *-- HeroResult : stores result
+SuperHeroModel o-- PropertyChangeListener : notifies
+SuperHeroModel ..> ValidationException : throws
+
+HeroResult --> HeroLevel : contains
+InputDialog ..> HeroData : restores values
+
+@enduml
