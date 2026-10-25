@@ -1,0 +1,44 @@
+---
+config:
+  fontFamily: "Arial, Helvetica, sans-serif"
+  theme: base
+  themeCSS: ".edgeLabel rect { opacity: 1 !important; } .cluster-label .nodeLabel { text-align: center; }"
+  themeVariables:
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "11px"
+    primaryColor: "#FFCC99"
+    secondaryColor: "#FFFFFF"
+    tertiaryColor: "#FFFFFF"
+    background: "#FFFFFF"
+    primaryBorderColor: "#99795C"
+    primaryTextColor: "#424242"
+    lineColor: "#424242"
+    textColor: "#424242"
+    noteBkgColor: "#FFFFFF"
+    noteBorderColor: "#5B5B59"
+    noteTextColor: "#424242"
+    clusterBkg: "#FFFFFF"
+    clusterBorder: "#5B5B59"
+    edgeLabelBackground: "#FFFFFF"
+---
+%% tree rendering (no view declared; rendering MovieGuideUI::CatalogScreen directly)
+%% style cameo
+%% not represented: Mermaid has no diagram frame with header tab
+flowchart TD
+  n0["`*«part def»*
+**CatalogScreen**`"]
+    n1["`*«part»*
+**search : SearchPanel**`"]
+  n0 --- n1
+    n2["`*«part»*
+**results : MovieCard**`"]
+  n0 --- n2
+    n3["`*«attribute»*
+**emptyResultMessage : String**`"]
+  n0 --- n3
+  classDef palette0 fill:#786DB0,stroke:#332288
+  classDef palette1 fill:#ADA7CF,stroke:#332288
+  classDef palette2 fill:#A0C9AD,stroke:#117733
+  class n0 palette0
+  class n1,n2 palette1
+  class n3 palette2
