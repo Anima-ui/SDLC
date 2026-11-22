@@ -6,8 +6,8 @@ autonumber
 title Диаграмма последовательности «Получение рекомендаций» (UC-04)
 
 actor Пользователь as User
-boundary "RecommendationController" as Controller
-control "RecommendationService" as Service
+participant "RecommendationController" as Controller
+participant "RecommendationService" as Service
 participant "CollectionRepository" as CollectionRepo
 participant "MovieRepository" as MovieRepo
 database "PostgreSQL" as DB
