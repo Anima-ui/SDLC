@@ -12,9 +12,9 @@
 
 - [заполненная спецификация требований](srs/srs.md);
 - [исходный шаблон из ветки lab1](srs/srs-template.md);
-- [мокап каталога](srs/figures/mockups/catalog.png);
-- [мокап карточки фильма](srs/figures/mockups/movie-details.png);
-- [мокап рекомендаций](srs/figures/mockups/recommendations.png).
+- [мокап каталога](srs/figures/catalog.png) и [исходник SysML v2](srs/figures/sysmlv2/catalog.sysml);
+- [мокап карточки фильма](srs/figures/movie-details.png) и [исходник SysML v2](srs/figures/sysmlv2/movie-details.sysml);
+- [мокап рекомендаций](srs/figures/recommendations.png) и [исходник SysML v2](srs/figures/sysmlv2/recommendations.sysml).
 
 Мокапы иллюстрируют визуальную концепцию интерфейса, а нормативные требования содержатся в SRS.
 
