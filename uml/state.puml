@@ -1,0 +1,32 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam linetype ortho
+skinparam roundcorner 12
+skinparam nodesep 280
+skinparam ranksep 75
+hide empty description
+title Диаграмма состояний объекта «Запуск синхронизации каталога»
+
+state "Создан" as Created
+state "Получение данных TMDB" as Fetching
+state "Обработка метаданных" as Processing
+state "Сохранение каталога" as Saving
+state "Успешно завершён" as Succeeded
+state "Завершён с ошибкой" as Failed
+state SuccessEnd <<end>>
+state FailureEnd <<end>>
+
+[*] -down-> Created : администратор запускает синхронизацию
+
+Created -down-> Fetching : отправить запрос поставщику
+Fetching -down-> Processing : получен ответ TMDB
+Processing -down-> Saving : метаданные обработаны
+Saving -down-> Succeeded : транзакция зафиксирована
+
+Fetching -right-> Failed : тайм-аут или ошибка TMDB
+Saving -right-> Failed : ошибка базы данных
+
+Succeeded -down-> SuccessEnd
+Failed -down-> FailureEnd
+@enduml

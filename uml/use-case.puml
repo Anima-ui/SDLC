@@ -1,0 +1,63 @@
+@startuml
+!pragma layout smetana
+left to right direction
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam linetype spline
+skinparam roundcorner 12
+skinparam usecase {
+  BackgroundColor White
+  BorderColor #333333
+  ArrowColor #333333
+}
+title Диаграмма вариантов использования системы «КиноНавигатор»
+
+actor "Гость" as Guest
+actor "Пользователь" as User
+actor "Администратор" as Admin
+actor "TMDB" as TMDB
+
+rectangle "Система «КиноНавигатор»" {
+  usecase "UC-01\nРегистрация и вход" as UC01
+  usecase "UC-02\nПоиск и просмотр фильма" as UC02
+  usecase "UC-03\nУправление личной\nколлекцией" as UC03
+  usecase "UC-04\nПолучение рекомендаций" as UC04
+  usecase "UC-05\nИмпорт коллекции\nиз CSV" as UC05
+  usecase "UC-06\nПредварительный просмотр\nимпорта" as UC06
+  usecase "UC-07\nЭкспорт коллекции\nв CSV" as UC07
+  usecase "UC-08\nУправление профилем" as UC08
+  usecase "UC-09\nУправление локальным\nкаталогом" as UC09
+  usecase "UC-10\nСинхронизация каталога\nс TMDB" as UC10
+}
+
+Guest --> UC01
+User --> UC02
+User --> UC03
+User --> UC04
+User --> UC05
+User --> UC07
+User --> UC08
+Admin --> UC09
+Admin --> UC10
+UC05 ..> UC06 : <<include>>
+TMDB --> UC02 : предоставляет метаданные
+TMDB --> UC10 : предоставляет метаданные
+
+note bottom of Guest
+  Неавторизованный посетитель.
+  Регистрируется или входит.
+end note
+note bottom of User
+  Владелец приватной коллекции.
+  Работает со своими данными.
+end note
+note bottom of Admin
+  Роль ADMIN.
+  Управляет общим каталогом.
+end note
+note bottom of TMDB
+  Внешний источник общих
+  метаданных о фильмах.
+end note
+@enduml

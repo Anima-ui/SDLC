@@ -12,19 +12,29 @@
 
 - [заполненная спецификация требований](srs/srs.md);
 - [исходный шаблон из ветки lab1](srs/srs-template.md);
-- [модель интерфейса на SysML v2](srs/figures/movie-ui.sysml);
-- [PNG-диаграмма, полученная из SysML v2](srs/figures/movie-ui-diagram.png);
-- [детальная SysML v2-диаграмма каталога](srs/figures/catalog-structure.png);
-- [детальная SysML v2-диаграмма карточки фильма](srs/figures/movie-details-structure.png);
-- [детальная SysML v2-диаграмма рекомендаций](srs/figures/recommendations-structure.png);
 - [мокап каталога](srs/figures/mockups/catalog.png);
 - [мокап карточки фильма](srs/figures/mockups/movie-details.png);
 - [мокап рекомендаций](srs/figures/mockups/recommendations.png).
 
-Модель проверена в строгом режиме OpenSysML 0.10.1. Диаграмма сгенерирована из этой модели. HTML/CSS-мокапы являются отдельной визуальной концепцией интерфейса.
+Мокапы иллюстрируют визуальную концепцию интерфейса, а нормативные требования содержатся в SRS.
+
+## Лабораторная работа № 5
+
+- [глоссарий](docs/glossary.md);
+- [дополнительные спецификации](docs/additional-specs.md);
+- [описания акторов и вариантов использования](docs/use-case-specifications.md);
+- [обновлённое описание дизайна](sdd/sdd.md);
+- [обновлённое архитектурное решение](adr/adr.md).
+
+UML-модель содержит по одной диаграмме каждого требуемого вида:
+
+| Диаграмма | PlantUML | Изображение |
+|---|---|---|
+| Варианты использования | [use-case.puml](uml/use-case.puml) | [use-case.png](uml/images/use-case.png) |
+| Активность | [activity.puml](uml/activity.puml) | [activity.png](uml/images/activity.png) |
+| Состояния | [state.puml](uml/state.puml) | [state.png](uml/images/state.png) |
+| Последовательность | [sequence.puml](uml/sequence.puml) | [sequence.png](uml/images/sequence.png) |
 
 ## Состояние проекта
 
-В текущей лабораторной подготовлена проектная документация. Реализация веб-приложения будет выполняться на следующих этапах курса. Заготовка Maven находится в `KinoNavigator/`.
-
-Спецификация имеет версию 0.1 и ожидает фактического ревью назначенного заказчика и преподавателя. Полученная обратная связь должна фиксироваться в pull request и истории изменений документа.
+Проектная документация дополнена глоссарием, спецификациями вариантов использования и динамической UML-моделью. SDD имеет версию 0.4. Реализация веб-приложения в рамках этой работы не изменялась; Maven-заготовка находится в `KinoNavigator/`.
