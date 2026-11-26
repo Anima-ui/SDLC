@@ -30,11 +30,23 @@ UML-модель содержит по одной диаграмме каждо�
 
 | Диаграмма | PlantUML | Изображение |
 |---|---|---|
-| Варианты использования | [use-case.puml](uml/use-case.puml) | [use-case.png](uml/images/use-case.png) |
-| Активность | [activity.puml](uml/activity.puml) | [activity.png](uml/images/activity.png) |
-| Состояния | [state.puml](uml/state.puml) | [state.png](uml/images/state.png) |
-| Последовательность | [sequence.puml](uml/sequence.puml) | [sequence.png](uml/images/sequence.png) |
+| Варианты использования | [use-case.puml](uml/use-case.puml) | [use-case.png](uml/images/behavior/use-case.png) |
+| Активность | [activity.puml](uml/activity.puml) | [activity.png](uml/images/behavior/activity.png) |
+| Состояния | [state.puml](uml/state.puml) | [state.png](uml/images/behavior/state.png) |
+| Последовательность | [sequence.puml](uml/sequence.puml) | [sequence.png](uml/images/behavior/sequence.png) |
+
+## Лабораторная работа № 6
+
+Статическая структура «КиноНавигатора» описана в [SDD, DV-012](sdd/sdd.md#312-статическая-uml-модель). Механизмы построения и связи диаграмм пояснены в [ADR-001](adr/adr.md#статическая-uml-модель).
+
+| Диаграмма | Редактируемый исходник | PNG | PDF |
+|---|---|---|---|
+| Классы «КиноНавигатора» | [PlantUML](uml/classes.puml) | [Изображение](uml/images/structural/classes.png) | [PDF](uml/images/structural/classes.pdf) |
+| Компоненты модульного монолита | [Visio](uml/components.vsdx) | [Изображение](uml/images/structural/components.png) | [PDF](uml/images/structural/components.pdf) |
+| Состав поставки и размещение в JVM | [Visio](uml/deployment.vsdx) | [Изображение](uml/images/structural/deployment.png) | [PDF](uml/images/structural/deployment.pdf) |
+
+PNG и PDF динамических диаграмм хранятся в `uml/images/behavior/`, статических — в `uml/images/structural/`. Актуальные редактируемые исходники компонентов и развёртывания — файлы Visio; прежние PlantUML-варианты удалены.
 
 ## Состояние проекта
 
-Проектная документация дополнена глоссарием, спецификациями вариантов использования и динамической UML-моделью. SDD имеет версию 0.4. Реализация веб-приложения в рамках этой работы не изменялась; Maven-заготовка находится в `KinoNavigator/`.
+SDD версии 0.6 объединяет динамическую модель и согласованное описание текущих статических диаграмм. Maven-заготовка веб-приложения находится в `KinoNavigator/`.

@@ -1,7 +1,9 @@
 @startuml
+!pragma teoz true
 skinparam defaultFontName Arial
 skinparam shadowing false
 skinparam roundcorner 12
+hide footbox
 autonumber
 title Диаграмма последовательности «Получение рекомендаций» (UC-04)
 
@@ -48,4 +50,31 @@ Service --> Controller : RecommendationDto[]
 deactivate Service
 Controller --> User : HTTP 200, рекомендации с причинами
 deactivate Controller
+
+autonumber stop
+||16||
+<style>
+sequenceDiagram {
+  group, groupHeader {
+    LineColor transparent
+    BackgroundColor transparent
+    FontColor transparent
+  }
+}
+</style>
+group
+  User -[hidden]> Controller
+  destroy User
+  destroy Controller
+end
+& group
+  Service -[hidden]> CollectionRepo
+  destroy Service
+  destroy CollectionRepo
+end
+& group
+  MovieRepo -[hidden]> DB
+  destroy MovieRepo
+  destroy DB
+end
 @enduml

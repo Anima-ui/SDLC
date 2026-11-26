@@ -1,0 +1,216 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam linetype polyline
+skinparam nodesep 135
+skinparam groupInheritance 2
+skinparam ranksep 56
+skinparam classAttributeIconSize 0
+skinparam classBackgroundColor<<interface>> #DDF2E7
+hide circle
+hide empty members
+title Диаграмма классов «Структура КиноНавигатора»
+
+abstract class BaseEntity {
+  - id : Long
+  + getId() : Long
+}
+
+
+class AuthService {
+  + register(email : String, password : String) : Session
+  + login(email : String, password : String) : Session
+  + requireUser(sessionId : String) : User
+  + logout(sessionId : String) : void
+  + updateDisplayName(userId : Long, name : String) : User
+  + deleteAccount(userId : Long) : void
+}
+
+class Session {
+  - id : String
+  - createdAt : Instant
+  - expiresAt : Instant
+  + isExpired(now : Instant) : Boolean
+}
+
+class User {
+  - email : String
+  - passwordHash : String
+  - displayName : String
+  - role : UserRole
+  - createdAt : Instant
+  + changeDisplayName(name : String) : void
+}
+enum UserRole <<enumeration>> {
+  USER
+  ADMIN
+}
+class CollectionEntry {
+  - status : CollectionStatus
+  - watchedDate : LocalDate [0..1]
+  - rating : Integer [0..1] {1..10}
+  - note : String [0..1]
+  - updatedAt : Instant
+  + changeStatus(status : CollectionStatus) : void
+  + recordViewing(date : LocalDate [0..1], rating : Integer [0..1]) : void
+  + changeNote(note : String [0..1]) : void
+}
+enum CollectionStatus <<enumeration>> {
+  WANT_TO_WATCH
+  WATCHED
+  DROPPED
+}
+User "1\n- owner" *-right- "0..*\n- entries" CollectionEntry
+User -down[hidden]- UserRole
+CollectionEntry -down[hidden]- CollectionStatus
+class Movie {
+  - source : String
+  - externalId : String [0..1]
+  - title : String
+  - originalTitle : String [0..1]
+  - year : Integer [0..1]
+  - overview : String [0..1]
+  - posterPath : String [0..1]
+  - active : Boolean
+  + deactivate() : void
+}
+class Genre {
+  - name : String
+  - externalId : Long [0..1]
+}
+class SyncRun {
+  - startedAt : Instant
+  - finishedAt : Instant [0..1]
+  - status : SyncStatus
+  - updatedCount : Integer
+  - errorSummary : String [0..1]
+  + startFetching() : void
+  + startProcessing() : void
+  + startSaving() : void
+  + complete(updatedCount : Integer) : void
+  + fail(errorSummary : String) : void
+}
+enum SyncStatus <<enumeration>> {
+  CREATED
+  FETCHING
+  PROCESSING
+  SAVING
+  SUCCEEDED
+  FAILED
+}
+CollectionEntry "0..*" -right- "1\n- movie" Movie
+Movie "0..*" -right- "0..*\n- genres" Genre
+SyncRun -right[hidden]- Session
+SyncRun -down[hidden]- SyncStatus
+
+class AdminService {
+  + synchronizeCatalog() : SyncRun
+  + findLatestSync() : SyncRun [0..1]
+  + saveMovie(movie : Movie) : Movie
+  + deactivateMovie(movieId : Long) : void
+}
+
+
+class CatalogService {
+  + search(filter : MovieFilter) : List<Movie>
+  + findLocalMovies(title : String, year : Integer [0..1]) : List<Movie>
+}
+
+interface MovieProvider <<interface>> {
+  + fetchMetadata(query : String) : List<MovieMetadata>
+}
+
+class TmdbAdapter {
+  + fetchMetadata(query : String) : List<MovieMetadata>
+}
+
+class CsvImportService {
+  + preview(userId : Long, csv : InputStream) : CsvImportPreview
+  + confirm(userId : Long, csv : InputStream) : CsvImportResult
+}
+
+class CollectionService {
+  + findEntries(userId : Long) : List<CollectionEntry>
+  + addMissingEntries(userId : Long, entries : List<CollectionEntry>) : List<CollectionEntry>
+}
+
+class RecommendationController {
+  + getRecommendations() : List<RecommendationDto>
+}
+
+class RecommendationService {
+  + getRecommendations(userId : Long) : List<RecommendationDto>
+}
+
+class RecommendationDto {
+  + movieId : Long
+  + reason : String
+  + algorithmVersion : String
+}
+
+interface UserRepository <<interface>> {
+  + findByEmail(email : String) : User [0..1]
+  + findById(id : Long) : User [0..1]
+  + save(user : User) : User
+  + deleteById(id : Long) : void
+}
+
+interface SessionRepository <<interface>> {
+  + findById(id : String) : Session [0..1]
+  + save(session : Session) : Session
+  + deleteById(id : String) : void
+  + deleteByUserId(userId : Long) : void
+}
+
+interface SyncRunRepository <<interface>> {
+  + findLatest() : SyncRun [0..1]
+  + save(run : SyncRun) : SyncRun
+}
+
+
+interface CollectionRepository <<interface>> {
+  + findByUserId(userId : Long) : List<CollectionEntry>
+  + insertIfAbsent(entry : CollectionEntry) : Boolean
+}
+
+interface MovieRepository <<interface>> {
+  + findAllActive() : List<Movie>
+  + findById(id : Long) : Movie [0..1]
+  + findByTitle(title : String, year : Integer [0..1]) : List<Movie>
+  + save(movie : Movie) : Movie
+}
+
+CsvImportService .down.> CatalogService
+CsvImportService .down.> CollectionService
+CatalogService .down.> MovieProvider : <<use>>
+TmdbAdapter .up.|> MovieProvider
+CollectionService .down.> CollectionRepository
+
+RecommendationController .down.> RecommendationService
+RecommendationService .right.> RecommendationDto
+RecommendationService .down.> CollectionRepository
+RecommendationService .down.> MovieRepository
+
+CollectionStatus -down[hidden]- CsvImportService
+Genre -down[hidden]- RecommendationController
+User -up-|> BaseEntity
+CollectionEntry -up-|> BaseEntity
+Movie -up-|> BaseEntity
+Genre -up-|> BaseEntity
+SyncRun -up-|> BaseEntity
+
+User "1\n- user" *-left- "0..*\n- sessions" Session
+AuthService .up.> User
+AuthService .up.> Session
+
+AdminService .up.> SyncRun
+AdminService .down.> MovieProvider : <<use>>
+SyncStatus -down[hidden]- AdminService
+
+AuthService .down.> UserRepository
+AuthService .down.> SessionRepository
+AdminService .down.> SyncRunRepository
+AdminService .down.> MovieRepository
+CatalogService .down.> MovieRepository
+
+@enduml
